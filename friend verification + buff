@@ -1,0 +1,30 @@
+-- Created by: Mini-Shadow - 1059260384
+-- This script determines if a player is a friend of another player with a specific ID when entering the game. If they are friends, the player will receive a specific effect with an ID; if not, the effect will be removed.
+
+local function enter_game_event(param)
+    local playerid = param.eventobjid
+    local targetPlayerID = 1059260384 -- ID of the specific player you want to check
+    local buffID = 16 -- Place the buff ID here
+
+    local ret, name = Player:getNickname(playerid)
+
+    if ret == ErrorCode.OK then
+        local codeFriendship = Player:HasFriend(playerid, targetPlayerID)
+
+        if codeFriendship == ErrorCode.OK then
+            -- Player is a friend of the target player
+            Chat:sendSystemMsg('[' .. name .. '] entered the game and is a friend of the target player with ID ' .. targetPlayerID)
+
+            -- Add the effect for friends
+            Actor:addBuff(playerid, buffID, 1, 10000) -- You can change the duration of the effect to your liking by modifying "10000"
+        else
+            -- Player is not a friend of the target player
+            Chat:sendSystemMsg('[' .. name .. '] entered the game, but is not a friend of the target player with ID ' .. targetPlayerID)
+
+            -- Remove the effect for non-friends
+            Actor:removeBuff(playerid, buffID)
+        end
+    end
+end
+
+ScriptSupportEvent:registerEvent('Game.AnyPlayer.EnterGame', enter_game_event)
