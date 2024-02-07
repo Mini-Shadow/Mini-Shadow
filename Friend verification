@@ -1,0 +1,23 @@
+-- Created by: Mini-Shadow - 1059260384
+-- This script determines if a player is a friend of another player with a specific ID when entering the game.
+
+local function enter_game_event(param)
+    local playerid = param.eventobjid
+    local targetPlayerID = 1059260384 -- ID of the specific player you want to check
+
+    local ret, name = Player:getNickname(playerid)
+
+    if ret == ErrorCode.OK then
+        local codeFriendship = Player:HasFriend(playerid, targetPlayerID)
+
+        if codeFriendship == ErrorCode.OK then
+            -- Player is a friend of the target player
+            Chat:sendSystemMsg('[' .. name .. '] entered the game and is a friend of the target player with ID ' .. targetPlayerID)
+        else
+            -- Player is not a friend of the target player
+            Chat:sendSystemMsg('[' .. name .. '] entered the game, but is not a friend of the target player with ID ' .. targetPlayerID)
+        end
+    end
+end
+
+ScriptSupportEvent:registerEvent('Game.AnyPlayer.EnterGame', enter_game_event)
