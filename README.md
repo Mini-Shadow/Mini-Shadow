@@ -1,1 +1,1 @@
--@miniworld-script
+miniworld-script
